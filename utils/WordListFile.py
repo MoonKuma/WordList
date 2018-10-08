@@ -17,6 +17,9 @@ class WordListFile(EasyFile):
         self.file_patten = 'test_word_list'
         return
 
+    def set_file_patten(self, new_patten):
+        self.file_patten = new_patten
+
     def open_latest_file(self):
         # word, trans, status(1 = pass, 0 = not pass), test_times, correct_times
         file_list = self.get_file_list(self.resource_path)
