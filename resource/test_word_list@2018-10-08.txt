@@ -1,0 +1,9 @@
+ACTIVITYEXCHANGE 海军节限时兑换
+AddDiamond 增加钻石
+AddExp 增加经验值
+AddMail 增加邮件
+AddMoney 增加金币/钻石/石油/科技点
+AddProp 增加道具
+AddShip 添加战舰
+AddVipExp 增加Vip经验
+ArenaBattle 竞技场战斗
