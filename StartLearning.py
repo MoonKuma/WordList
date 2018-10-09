@@ -6,5 +6,5 @@
 # @Desc  : Entrance of all functions:
 #          1. Set file patten
 #          2. Recall
-#          3. Test
+#          3. SingleChoice
 #          4. FlashCard
