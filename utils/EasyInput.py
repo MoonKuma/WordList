@@ -20,17 +20,30 @@ else:
     raise RuntimeError(error_msg)
 
 
+class AlarmException(Exception):
+    pass
+
+
 class EasyInput(object):
 
     def __init__(self):
         self.system_type = platform.system()
         return
 
+    def input_without_check(self, input_str, default_return=0, *time_limit):
+        if len(time_limit) > 0 and int(time_limit[0]) > 0:
+            return self.__input_and_check_limit_time(input_str, int(time_limit[0]), default_return)
+        else:
+            return raw_input(input_str)
+
     def input_and_check(self, input_str, accept_list, default_return, *time_limit):
         if len(time_limit) > 0 and int(time_limit[0]) > 0:
-            self.__input_and_check_limit_time(input_str, accept_list, int(time_limit[0]), default_return)
+            return self.__input_hold(input_str, accept_list, int(time_limit[0]), default_return)
         else:
             return self.__input(input_str, accept_list)
+
+    def __alarmHandler(signum, frame): # this is required in linux - signal method
+        raise AlarmException
 
     def __accept(self, accept_list, test_word):
         test_word = test_word.lower()
@@ -64,7 +77,7 @@ class EasyInput(object):
 
     def __input_and_check_limit_time(self, input_str, time_count, default_return):
         if self.system_type == 'Linux':
-            return default_return
+            return self.__linux_input(input_str, default_return, time_count)
         elif self.system_type == 'Windows':
             return self.__windows_input(input_str, default_return, time_count)
 
@@ -90,7 +103,21 @@ class EasyInput(object):
         if len(input_rec) > 0:
             return input_rec + ''
         else:
+            print '\nPrompt timeout. Continuing...'
             return default
+
+    def __linux_input(self, input_str, default, time_count):
+        # Resolved only under python(linux)
+        signal.signal(signal.SIGALRM, self.__alarmHandler)
+        signal.alarm(time_count)
+        try:
+            text = raw_input(input_str)
+            signal.alarm(0)
+            return text
+        except AlarmException:
+            print '\nPrompt timeout. Continuing...'
+        signal.signal(signal.SIGALRM, signal.SIG_IGN)
+        return default
 
     # Blamed method:
     def __input_and_check_thread(self, input_str, accept_list, time_count):
@@ -112,3 +139,4 @@ class EasyInput(object):
 if __name__ == '__main__':
     obj = EasyInput()
     word_dict = obj.input_and_check('test input:\n', ['A', 'b', 'c'], 10)
+    print 'word_dict:', str(word_dict)
