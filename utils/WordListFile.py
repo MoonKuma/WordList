@@ -11,14 +11,26 @@ import time
 
 class WordListFile(EasyFile):
 
-    def __init__(self):
+    def __init__(self, resource_path):
         super(WordListFile, self).__init__()
-        self.resource_path = '../resource'
+        self.resource_path = resource_path
         self.file_patten = 'test_word_list'
         return
 
     def set_file_patten(self, new_patten):
         self.file_patten = new_patten
+
+    def get_current_pattens(self):
+        file_list = self.get_file_list(self.resource_path)
+        patten_list = list()
+        for file_name in file_list:
+            file_head = self.get_file_head(file_name)
+            file_head = file_head.split('@')
+            head_name = file_head[0]
+            if head_name not in patten_list:
+                patten_list.append(head_name)
+        patten_list = sorted(patten_list)
+        return patten_list
 
     def open_latest_file(self):
         # word, trans, status(1 = pass, 0 = not pass), test_times, correct_times
@@ -95,7 +107,7 @@ class WordListFile(EasyFile):
 
 # test
 if __name__ == '__main__':
-    obj = WordListFile()
+    obj = WordListFile('../resource')
     word_dict = obj.open_latest_file()
     obj.save_test_result(word_dict)
 

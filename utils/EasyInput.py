@@ -69,10 +69,10 @@ class EasyInput(object):
     def __input_hold(self, input_str, accept_list, time_count, default_return):
         receive_str = self.__input_and_check_limit_time(input_str, time_count, default_return)
         while True:
-            if not self.__accept(accept_list, receive_str):
-                receive_str = self.__input_and_check_limit_time(input_str, time_count, default_return)
-            else:
+            if receive_str == default_return or self.__accept(accept_list, receive_str):
                 break
+            else:
+                receive_str = self.__input_and_check_limit_time(input_str, time_count, default_return)
         return receive_str
 
     def __input_and_check_limit_time(self, input_str, time_count, default_return):
@@ -83,7 +83,7 @@ class EasyInput(object):
 
     def __windows_input(self, input_str, default, time_count):
         start_time = time.time()
-        sys.stdout.write('%s:' % input_str)
+        sys.stdout.write('%s' % input_str)
         sys.stdout.flush()
         input_rec = ''
         while True:
@@ -138,5 +138,5 @@ class EasyInput(object):
 # test
 if __name__ == '__main__':
     obj = EasyInput()
-    word_dict = obj.input_and_check('test input:\n', ['A', 'b', 'c'], 10)
+    word_dict = obj.input_and_check('test input:\n', ['A', 'b', 'c'], 'empty', 10)
     print 'word_dict:', str(word_dict)
