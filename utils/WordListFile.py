@@ -37,6 +37,7 @@ class WordListFile(EasyFile):
         file_list = self.get_file_list(self.resource_path)
         file_accept = ''
         max_time = ''
+        separator = ''
         file_type = '.txt'
         file_dict = dict()
         for file_name in file_list:
@@ -48,8 +49,9 @@ class WordListFile(EasyFile):
                 file_accept = self.file_patten
                 if len(file_head) == 2 and file_head[1] > max_time:
                     max_time = file_head[1]
+                    separator = '@'
         if file_accept != '':
-            file_accept = self.resource_path + '/' + file_accept + '@' + max_time + file_type
+            file_accept = self.resource_path + '/' + file_accept + separator + max_time + file_type
             file_op = open(file_accept, 'r')
             try:
                 for line in file_op.readlines():

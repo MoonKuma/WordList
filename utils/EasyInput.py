@@ -124,7 +124,7 @@ class EasyInput(object):
         # no longer used
         # thread could be used to end function but unable to escape from the input(a build in func) gui
         return_list = list()
-        t = threading.Thread(target=self.__input, args=(input_str, accept_list, return_list, ))
+        t = threading.Thread(target=self.__input, args=(input_str, accept_list, ))
         t.start()
         t.join(time_count)
         if len(return_list) == 0:
