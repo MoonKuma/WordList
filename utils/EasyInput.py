@@ -34,7 +34,7 @@ class EasyInput(object):
         if len(time_limit) > 0 and int(time_limit[0]) > 0:
             return self.__input_and_check_limit_time(input_str, int(time_limit[0]), default_return)
         else:
-            return raw_input(input_str)
+            return input(input_str)
 
     def input_and_check(self, input_str, accept_list, default_return, *time_limit):
         if len(time_limit) > 0 and int(time_limit[0]) > 0:
@@ -58,12 +58,12 @@ class EasyInput(object):
         return False
 
     def __input(self, input_str, accept_list):
-        receive_str = raw_input(input_str)
+        receive_str = input(input_str)
         if receive_str == '':
             receive_str = 'Enter'
         while True:
             if not self.__accept(accept_list, receive_str):
-                receive_str = raw_input(input_str)
+                receive_str = input(input_str)
                 if receive_str == '':
                     receive_str = 'Enter'
             else:
@@ -120,13 +120,14 @@ class EasyInput(object):
         signal.signal(signal.SIGALRM, self.__alarmHandler)
         signal.alarm(time_count)
         try:
-            text = raw_input(input_str)
+            text = input(input_str)
             signal.alarm(0)
             if text == '':
                 return 'Enter'
             return text
         except AlarmException:
-            print '\nPrompt timeout. Continuing...'
+            pass
+            # print '\nPrompt timeout. Continuing...'
         signal.signal(signal.SIGALRM, signal.SIG_IGN)
         return default
 
@@ -152,4 +153,5 @@ if __name__ == '__main__':
     # word_dict = obj.input_and_check('test input:\n', ['A', 'b', 'c'], 'empty', 20)
     # print 'word_dict:', str(word_dict)
     word_dict = obj.input_without_check('try input enter\n', 0, 10)
-    print 'word_dict:', str(word_dict)
+    msg = 'word_dict:' + str(word_dict)
+    print(msg)

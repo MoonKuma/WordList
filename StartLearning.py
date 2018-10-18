@@ -23,9 +23,9 @@ class StartLearning(object):
         self.resource_path = './resource'
         self.word_dict = dict()  # original word list
         self.word_dict_tmp = dict()  # empty word list for recording and reporting performance each time
-        self.word_length = 100
+        self.word_length = 10
         self.pass_rate = 0.8
-        self.recall_time_limit = 2
+        self.recall_time_limit = 1.5
         # functions
         self.file_reader = WordListFile.WordListFile(self.resource_path)
         self.easy_input = EasyInput.EasyInput()
@@ -45,7 +45,8 @@ class StartLearning(object):
             simulate_switch(answer, '4', self.save_and_quit)
             if answer == '4':
                 break
-        print 'Thanks for participant'
+        msg = 'Thanks for participant'
+        print(msg)
         return 0
 
     def set_file_patten(self):

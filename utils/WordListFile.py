@@ -5,7 +5,7 @@
 # @Date  : 2018/10/8
 # @Desc  : Open/Save file list
 
-from EasyFile import EasyFile
+from utils.EasyFile import EasyFile
 import time
 
 
@@ -52,7 +52,7 @@ class WordListFile(EasyFile):
                     separator = '@'
         if file_accept != '':
             file_accept = self.resource_path + '/' + file_accept + separator + max_time + file_type
-            file_op = open(file_accept, 'r')
+            file_op = open(file_accept,  'r', encoding='utf-8')
             try:
                 for line in file_op.readlines():
                     line = line.strip()
@@ -91,7 +91,7 @@ class WordListFile(EasyFile):
         save_name = self.resource_path + '/' + self.file_patten + '@' + time.strftime("%Y-%m-%d_", time_stamp) + str(int(time.time())) + '.txt'
         if len(word_dict.keys()) > 0:
             if self.file_not_exist(save_name):
-                file_save = open(save_name, 'w')
+                file_save = open(save_name, 'w', encoding='utf-8')
                 try:
                     # do something
                     for word in word_dict:
