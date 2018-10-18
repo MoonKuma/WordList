@@ -59,9 +59,13 @@ class EasyInput(object):
 
     def __input(self, input_str, accept_list):
         receive_str = raw_input(input_str)
+        if receive_str == '':
+            receive_str = 'Enter'
         while True:
             if not self.__accept(accept_list, receive_str):
                 receive_str = raw_input(input_str)
+                if receive_str == '':
+                    receive_str = 'Enter'
             else:
                 break
         return receive_str
@@ -86,6 +90,7 @@ class EasyInput(object):
         sys.stdout.write('%s' % input_str)
         sys.stdout.flush()
         input_rec = ''
+        timeout = 0
         while True:
             ini = msvcrt.kbhit()
             try:
@@ -98,21 +103,27 @@ class EasyInput(object):
             except:
                 pass
             if len(input_rec) == 0 and time.time() - start_time > time_count:
+                timeout = 1
                 break
         print ('')  # needed to move to next line
         if len(input_rec) > 0:
             return input_rec + ''
         else:
-            print '\nPrompt timeout. Continuing...'
-            return default
+            # print '\nPrompt timeout. Continuing...'
+            if timeout:
+                return default
+            return 'Enter'
 
     def __linux_input(self, input_str, default, time_count):
+        pass
         # Resolved only under python(linux)
         signal.signal(signal.SIGALRM, self.__alarmHandler)
         signal.alarm(time_count)
         try:
             text = raw_input(input_str)
             signal.alarm(0)
+            if text == '':
+                return 'Enter'
             return text
         except AlarmException:
             print '\nPrompt timeout. Continuing...'
@@ -138,5 +149,7 @@ class EasyInput(object):
 # test
 if __name__ == '__main__':
     obj = EasyInput()
-    word_dict = obj.input_and_check('test input:\n', ['A', 'b', 'c'], 'empty', 10)
+    # word_dict = obj.input_and_check('test input:\n', ['A', 'b', 'c'], 'empty', 20)
+    # print 'word_dict:', str(word_dict)
+    word_dict = obj.input_without_check('try input enter\n', 0, 10)
     print 'word_dict:', str(word_dict)

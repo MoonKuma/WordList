@@ -47,8 +47,8 @@ def word_value(word_detail_dict):
     correct_times = word_detail_dict['correct_times']
     if status == 1:
         value = 1
-    elif test_times==0:
+    elif test_times == 0:
         value = 0.5
-    elif test_times >0:
+    elif test_times > 0:
         value = float(correct_times)/test_times
     return value

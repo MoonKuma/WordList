@@ -13,6 +13,7 @@
 
 from utils import EasyInput, WordListFile
 from utils.Tools import simulate_switch, system_time
+from recall import recall
 
 
 class StartLearning(object):
@@ -22,6 +23,9 @@ class StartLearning(object):
         self.resource_path = './resource'
         self.word_dict = dict()  # original word list
         self.word_dict_tmp = dict()  # empty word list for recording and reporting performance each time
+        self.word_length = 100
+        self.pass_rate = 0.8
+        self.recall_time_limit = 2
         # functions
         self.file_reader = WordListFile.WordListFile(self.resource_path)
         self.easy_input = EasyInput.EasyInput()
@@ -64,7 +68,9 @@ class StartLearning(object):
 
     def recall_test(self):
         # recall test
-
+        self.word_dict_tmp = dict()
+        recall(self.word_dict, self.word_dict_tmp, self.word_length, self.pass_rate, self.recall_time_limit)
+        self.__report_result(self.word_dict_tmp, 'Current test result')
         pass
 
     def report_current_result(self):
@@ -153,17 +159,17 @@ class StartLearning(object):
             else:
                 accuracy = float(word_dict[word]['correct_times'])/word_dict[word]['test_times']
                 if accuracy == 0:
-                    accuracy_dict['%0'] += 1
+                    accuracy_dict['%0'] = accuracy_dict.setdefault('%0',0) + 1
                 if 0.25 >= accuracy > 0:
-                    accuracy_dict['0%~25%'] += 1
+                    accuracy_dict['0%~25%'] = accuracy_dict.setdefault('0%~25%',0) + 1
                 if 0.5 >= accuracy > 0.25:
-                    accuracy_dict['25%~50%'] += 1
+                    accuracy_dict['25%~50%'] = accuracy_dict.setdefault('25%~50%',0) + 1
                 if 0.75 >= accuracy > 0.5:
-                    accuracy_dict['50%~75%'] += 1
+                    accuracy_dict['50%~75%'] = accuracy_dict.setdefault('50%~75%',0) + 1
                 if 1 > accuracy > 0.75:
-                    accuracy_dict['50%~75%'] += 1
+                    accuracy_dict['50%~75%'] = accuracy_dict.setdefault('50%~75%',0) + 1
                 if accuracy == 1:
-                    accuracy_dict['100%'] += 1
+                    accuracy_dict['100%'] = accuracy_dict.setdefault('100%',0) + 1
                 if accuracy < 1:
                     incorrect_list.append(word)
                 tmp_acc_dict[word] = accuracy
