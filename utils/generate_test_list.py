@@ -28,6 +28,7 @@ def generate_test_list(word_dict, list_length):
             value = word_value(word_dict[word])
             value_dict[word] = value
             word_list.append(word)
+        random.shuffle(word_list)
         word_list = sorted(word_list, key=lambda x:value_dict[x])
         word_list = word_list[0:num1]
         rest_list = list()
@@ -47,8 +48,8 @@ def word_value(word_detail_dict):
     correct_times = word_detail_dict['correct_times']
     if status == 1:
         value = 1
-    elif test_times == 0:
+    elif test_times < 5:
         value = 0.5
-    elif test_times > 0:
+    elif test_times >= 5:
         value = float(correct_times)/test_times
     return value

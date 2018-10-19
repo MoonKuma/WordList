@@ -5,7 +5,7 @@
 # @Date  : 2018/10/8
 # @Desc  : Entrance of all functions:
 #          [1]. Set file patten
-#          [2]. Recall ([A]: know, [B]:forget)
+#          [2]. Recall (press [enter] within limited time)
 #          [3]. Single choice([A]:meaning1,[B]:meaning2, [C]:meaning3, [D]:meaning4)
 #          [4]. Flashcard([H]:hold, [H]:pass)
 #          [5]. Report result([T]total,[C]current)
@@ -25,12 +25,12 @@ class StartLearning(object):
         self.word_dict_tmp = dict()  # empty word list for recording and reporting performance each time
         self.word_length = 10
         self.pass_rate = 0.8
-        self.recall_time_limit = 1.5
+        self.recall_time_limit = 3
         # functions
         self.file_reader = WordListFile.WordListFile(self.resource_path)
         self.easy_input = EasyInput.EasyInput()
         # initial
-        self.file_patten = 'test_word_list'
+        self.file_patten = 'gre_word'
         self.word_dict = self.__load_word_dict()
         return
 
@@ -69,9 +69,17 @@ class StartLearning(object):
 
     def recall_test(self):
         # recall test
-        self.word_dict_tmp = dict()
-        recall(self.word_dict, self.word_dict_tmp, self.word_length, self.pass_rate, self.recall_time_limit)
-        self.__report_result(self.word_dict_tmp, 'Current test result')
+        message = '***Start a recall test, Continue?***\n*[Enter]. Yes\n*[R]. Return\n'
+        acceptable_input = ['Enter', 'R']
+        while True:
+            answer = self.easy_input.input_and_check(message, acceptable_input, 0)
+            if answer == 'Enter':
+                [new_num, new_time] = recall(self.word_dict, self.word_dict_tmp, self.word_length, self.pass_rate, self.recall_time_limit)
+                self.__report_result(self.word_dict_tmp, 'Current test result')
+                self.word_length = new_num
+                self.recall_time_limit = new_time
+            else:
+                break
         pass
 
     def report_current_result(self):
@@ -90,7 +98,7 @@ class StartLearning(object):
         # quit
         msg = '****Save and quit now!****\n****Thanks for participating!****'
         print(msg)
-        # self.__save_word_dict()
+        self.__save_word_dict()
         return 1
 
 
@@ -111,6 +119,8 @@ class StartLearning(object):
         #     AddProp 增加道具
         #     AddShip 添加战舰
         #     AddVipExp 增加Vip经验
+        msg = '**************************************'
+        print(msg)
         msg = 'Title: ' + message
         print(msg)
         msg = 'Report time: ' + system_time()
@@ -128,7 +138,16 @@ class StartLearning(object):
         print(msg)
         msg = 'Top incorrect: \n'
         for word in incorrect_list:
-            msg = msg + ',' + str(word)
+            test_time = report_word_dict[word]['test_times']
+            accuracy = 0
+            if test_time != 0:
+                accuracy = int(100*report_word_dict[word]['correct_times']/float(test_time))
+            msg += str(word) + ':' + self.word_dict[word]['trans'] + '(' + str(accuracy) + '%)\n'
+        print(msg)
+        accept_list = ['Enter']
+        msg = 'Press [Enter] to continue...\n'
+        self.easy_input.input_and_check(msg, accept_list, 0)
+        msg = '**************************************'
         print(msg)
         return 1
 

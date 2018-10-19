@@ -51,61 +51,84 @@ class WordListFile(EasyFile):
                     max_time = file_head[1]
                     separator = '@'
         if file_accept != '':
-            file_accept = self.resource_path + '/' + file_accept + separator + max_time + file_type
-            file_op = open(file_accept,  'r', encoding='utf-8')
-            try:
-                for line in file_op.readlines():
-                    line = line.strip()
-                    line_array = line.split(' ')
-                    word = None
-                    trans = None
-                    status = 0
-                    test_times = 0
-                    correct_times = 0
-                    if len(line_array) >= 2:
-                        word = line_array[0]
-                        trans = line_array[1]
-                        if len(line_array) == 5:
-                            status = int(line_array[2])
-                            test_times = int(line_array[3])
-                            correct_times = int(line_array[4])
-                    if word is not None and word not in file_dict.keys():
-                        file_dict[word] = dict()
-                        file_dict[word]['word'] = word
-                        file_dict[word]['trans'] = trans
-                        file_dict[word]['status'] = status
-                        file_dict[word]['test_times'] = test_times
-                        file_dict[word]['correct_times'] = correct_times
-                if len(file_dict) > 0:
-                    log = 'Load Success from file:' + file_accept
-                    print(log)
-            finally:
-                file_op.close()
+            file_accept_name = self.resource_path + '/' + file_accept + separator + max_time + file_type
+            self.__dissect_files(file_dict, file_accept_name)
         else:
             print('No word list is found')
+        # original word repair
+        word_dict_temp = dict()
+        file_accept_name = self.resource_path + '/' + file_accept + file_type
+        self.__dissect_files(word_dict_temp, file_accept_name)
+        for word in word_dict_temp.keys():
+            if word not in file_dict.keys():
+                msg = 'Adding new word from original:' + word
+                print(msg)
+                file_dict[word] = dict()
+                file_dict[word]['word'] = word
+                file_dict[word]['trans'] = word_dict_temp[word]['trans']
+                file_dict[word]['status'] = 0
+                file_dict[word]['test_times'] = 0
+                file_dict[word]['correct_times'] = 0
         return file_dict
 
     def save_test_result(self, word_dict):
         # word, trans, status(1 = pass, 0 = not pass), test_times, correct_times
         time_stamp = time.localtime()
-        save_name = self.resource_path + '/' + self.file_patten + '@' + time.strftime("%Y-%m-%d_", time_stamp) + str(int(time.time())) + '.txt'
+        save_name = self.resource_path + '/' + self.file_patten + '@' + time.strftime("%Y-%m-%d", time_stamp) + '.txt'
         if len(word_dict.keys()) > 0:
             if self.file_not_exist(save_name):
-                file_save = open(save_name, 'w', encoding='utf-8')
-                try:
-                    # do something
-                    for word in word_dict:
-                        str2wri = word_dict[word]['word'] + ' ' + word_dict[word]['trans'] + ' ' + str(word_dict[word]['status']) + ' ' + str(word_dict[word]['test_times']) + ' ' + str(word_dict[word]['correct_times']) + '\n'
-                        file_save.write(str2wri)
-                finally:
-                    file_save.close()
-            else:
-                log = 'Duplicated name, save_name:' + save_name
+                log = 'New file, save_name:' + save_name
                 print(log)
+            else:
+                log = 'Duplicated name (automatically overwrite), save_name:' + save_name
+                print(log)
+            file_save = open(save_name, 'w', encoding='utf-8')
+            try:
+                # do something
+                for word in word_dict:
+                    str2wri = word_dict[word]['word'] + ' ' + word_dict[word]['trans'] + ' ' + str(
+                        word_dict[word]['status']) + ' ' + str(word_dict[word]['test_times']) + ' ' + str(
+                        word_dict[word]['correct_times']) + '\n'
+                    file_save.write(str2wri)
+                print('Result file saved!')
+            finally:
+                file_save.close()
         else:
             log = 'Word diction is empty, len(word_dict.keys()):' + str(len(word_dict.keys()))
             print(log)
 
+
+    # Private Method
+    def __dissect_files(self, file_dict, file_accept):
+        file_op = open(file_accept, 'r', encoding='utf-8')
+        try:
+            for line in file_op.readlines():
+                line = line.strip()
+                line_array = line.split(' ')
+                word = None
+                trans = None
+                status = 0
+                test_times = 0
+                correct_times = 0
+                if len(line_array) >= 2:
+                    word = line_array[0]
+                    trans = line_array[1]
+                    if len(line_array) == 5:
+                        status = int(line_array[2])
+                        test_times = int(line_array[3])
+                        correct_times = int(line_array[4])
+                if word is not None and word not in file_dict.keys():
+                    file_dict[word] = dict()
+                    file_dict[word]['word'] = word
+                    file_dict[word]['trans'] = trans
+                    file_dict[word]['status'] = status
+                    file_dict[word]['test_times'] = test_times
+                    file_dict[word]['correct_times'] = correct_times
+            if len(file_dict) > 0:
+                log = 'Load Success from file:' + file_accept
+                print(log)
+        finally:
+            file_op.close()
 
 # test
 if __name__ == '__main__':
