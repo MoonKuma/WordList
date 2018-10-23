@@ -14,7 +14,7 @@
 from utils import EasyInput, WordListFile
 from utils.Tools import simulate_switch, system_time
 from recall import recall
-
+import time
 
 class StartLearning(object):
 
@@ -137,13 +137,15 @@ class StartLearning(object):
             msg = msg + str(rate) + ' : ' + str(accuracy_dict[rate]) + '\n'
         print(msg)
         msg = 'Top incorrect: \n'
+        print(msg)
         for word in incorrect_list:
             test_time = report_word_dict[word]['test_times']
             accuracy = 0
             if test_time != 0:
                 accuracy = int(100*report_word_dict[word]['correct_times']/float(test_time))
-            msg += str(word) + ':' + self.word_dict[word]['trans'] + '(' + str(accuracy) + '%)\n'
-        print(msg)
+            msg = str(word) + ':' + self.word_dict[word]['trans'] + '(' + str(accuracy) + '%)'
+            print(msg)
+            time.sleep(0.1)
         accept_list = ['Enter']
         msg = 'Press [Enter] to continue...\n'
         self.easy_input.input_and_check(msg, accept_list, 0)

@@ -7,6 +7,7 @@
 
 from utils.EasyFile import EasyFile
 import time
+import copy
 
 
 class WordListFile(EasyFile):
@@ -69,6 +70,12 @@ class WordListFile(EasyFile):
                 file_dict[word]['status'] = 0
                 file_dict[word]['test_times'] = 0
                 file_dict[word]['correct_times'] = 0
+        key_set = copy.copy(file_dict)
+        for word in key_set.keys():
+            if word not in word_dict_temp.keys():
+                msg = 'Remove word based on original:' + word
+                print(msg)
+                file_dict.pop(word)
         return file_dict
 
     def save_test_result(self, word_dict):
