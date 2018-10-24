@@ -15,7 +15,7 @@ import time
 test_word_num = 0
 test_time_length = 1
 input_unit = EasyInput()
-
+count = 1
 
 def recall(total_word_dict, current_word_dict, test_num, pass_rate, recall_time_limit):
     global test_word_num
@@ -47,9 +47,11 @@ def recall(total_word_dict, current_word_dict, test_num, pass_rate, recall_time_
 
 def __recall_test(total_word_dict, word, recall_time_limit):
     global input_unit
+    global count
     accept_list = ['Enter']
-    msg = '---(ready)---'
+    msg = '--(ready)--' + str(count) + '--'
     print(msg)
+    count += 1
     time.sleep(0.5)
     msg = word
     answer = input_unit.input_and_check(msg, accept_list, 'Delay', recall_time_limit)
