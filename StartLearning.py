@@ -14,7 +14,8 @@ from utils import EasyInput, WordListFile
 from utils.Tools import simulate_switch
 from recall import recall
 from report import report_result
-
+import io
+import sys
 
 class StartLearning(object):
 
@@ -32,6 +33,8 @@ class StartLearning(object):
         # initial
         self.file_patten = 'gre_word'
         self.word_dict = self.__load_word_dict()
+        # print chinese in linux
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
         return
 
     def main_screen_direct(self):
