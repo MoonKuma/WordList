@@ -42,8 +42,6 @@ class EasyInput(object):
         else:
             return self.__input(input_str, accept_list)
 
-    def __alarmHandler(signum, frame): # this is required in linux - signal method
-        raise AlarmException
 
     def __accept(self, accept_list, test_word):
         test_word = test_word.lower()
@@ -115,9 +113,10 @@ class EasyInput(object):
             return 'Enter'
 
     def __linux_input(self, input_str, default, time_count):
-        pass
+        def __alarmHandler(signum, frame):  # this is required in linux - signal method
+            raise AlarmException
         # Resolved only under python(linux)
-        signal.signal(signal.SIGALRM, self.__alarmHandler)
+        signal.signal(signal.SIGALRM, __alarmHandler)
         signal.alarm(time_count)
         try:
             text = input(input_str)
