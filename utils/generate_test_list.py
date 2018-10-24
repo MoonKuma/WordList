@@ -37,6 +37,11 @@ def generate_test_list(word_dict, list_length):
                 rest_list.append(word)
         random.shuffle(rest_list)
         rest_list = rest_list[0:num2]
+        # # test random seed
+        # msg = 'Random rest list:'
+        # for word in rest_list:
+        #     msg = msg + ',' + word
+        # print(msg)
         sum_list = word_list + rest_list
         return sum_list
 
@@ -48,10 +53,10 @@ def word_value(word_detail_dict):
     correct_times = word_detail_dict['correct_times']
     if status == 1:
         value = 1
-    elif 0 < test_times < 5:
+    elif 0 < test_times < 3:
         value = 0.5
     elif test_times == 0:
         value = 0.49
-    elif test_times >= 5:
+    elif test_times >= 3:
         value = float(correct_times)/test_times
     return value

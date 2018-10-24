@@ -31,21 +31,21 @@ def recall(total_word_dict, current_word_dict, test_num, pass_rate, recall_time_
     msg = 'Press [Enter] to start...\n[1].Reset numbers of words, [2].Reset time limit\n'
     while True:
         answer = input_unit.input_and_check(msg, accept_list, 0)
-        simulate_switch(answer, '1', reset_num)
-        simulate_switch(answer, '2', reset_time)
+        simulate_switch(answer, '1', __reset_num)
+        simulate_switch(answer, '2', __reset_time)
         if answer == 'Enter':
             break
     current_word_list = generate_test_list(total_word_dict, test_word_num)
     msg = 'Start recall test with ' + str(len(current_word_list)) + ' words.'
     print(msg)
     for word in current_word_list:
-        result = recall_test(total_word_dict, word, test_time_length)
+        result = __recall_test(total_word_dict, word, test_time_length)
         record_result(word, result, current_word_dict, total_word_dict, pass_rate)
     msg = 'You have finished! press [Enter] to continue...\n'
     input_unit.input_and_check(msg, accept_list, 0)
     return [test_word_num, test_time_length]
 
-def recall_test(total_word_dict, word, recall_time_limit):
+def __recall_test(total_word_dict, word, recall_time_limit):
     global input_unit
     accept_list = ['Enter']
     msg = '---(ready)---'
@@ -66,7 +66,7 @@ def recall_test(total_word_dict, word, recall_time_limit):
         return 0
 
 
-def reset_num():
+def __reset_num():
     global test_word_num
     global input_unit
     pattern = re.compile(r'^[1-9]+[0-9]?$')
@@ -82,7 +82,7 @@ def reset_num():
         print('Input is not a number')
 
 
-def reset_time():
+def __reset_time():
     global test_word_num
     global test_time_length
     global input_unit
