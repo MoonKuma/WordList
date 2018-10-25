@@ -21,6 +21,8 @@ def recall(total_word_dict, current_word_dict, test_num, pass_rate, recall_time_
     global test_word_num
     global test_time_length
     global input_unit
+    global count
+    count = 1
     test_word_num = test_num
     test_time_length = recall_time_limit
     msg = 'You need to press Enter in less than ' + str(recall_time_limit) + ' second(s) to confirm recognition of each word'

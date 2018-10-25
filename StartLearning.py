@@ -14,8 +14,14 @@ from utils import EasyInput, WordListFile
 from utils.Tools import simulate_switch
 from recall import recall
 from report import report_result
-import io
-import sys
+import platform
+system_type = platform.system()
+if system_type == 'Linux':
+    import io
+    import sys
+    msg = '[Caution] You are running this on a linux system, the speed will be relative slow for tampering with the standard output'
+    print(msg)
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8') # necessary for printing chinese characters in Linux
 
 class StartLearning(object):
 
@@ -33,8 +39,7 @@ class StartLearning(object):
         # initial
         self.file_patten = 'gre_word'
         self.word_dict = self.__load_word_dict()
-        # print chinese in linux
-        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
         return
 
     def main_screen_direct(self):
