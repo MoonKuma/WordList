@@ -69,6 +69,7 @@ class StartLearning(object):
         for patten in patten_list:
             message += '*[' + str(patten_num) + '].' + patten + '*\n'
             accept_list.append(str(patten_num))
+            patten_num += 1
         file_patten_num = self.easy_input.input_and_check(message, accept_list, 0)
         self.file_patten = patten_list[int(file_patten_num) - 1]
         print_msg = 'Current patten: ' + self.file_patten
