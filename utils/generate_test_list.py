@@ -12,7 +12,7 @@ def generate_test_list(word_dict, list_length):
     # word, trans, status(1 = pass, 0 = not pass), test_times, correct_times
     word_list = list()
     len_word = len(word_dict.keys())
-    if len_word <= list_length:
+    if len_word < list_length:
         msg = 'Current length of word dict:' + str(len_word) + ' is smaller than ' + str(list_length) +  ', all words will be tested this time'
         print(msg)
         for word in word_dict.keys():

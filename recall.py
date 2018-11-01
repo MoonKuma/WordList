@@ -33,7 +33,7 @@ def recall(total_word_dict, current_word_dict, test_num, pass_rate, recall_time_
     msg = 'Press [Enter] to start...\n[1].Reset numbers of words, [2].Reset time limit\n'
     while True:
         answer = input_unit.input_and_check(msg, accept_list, 0)
-        simulate_switch(answer, '1', __reset_num)
+        simulate_switch(answer, '1', __reset_num, max_number=len(total_word_dict.keys()))
         simulate_switch(answer, '2', __reset_time)
         if answer == 'Enter':
             break
@@ -70,14 +70,15 @@ def __recall_test(total_word_dict, word, recall_time_limit):
         return 0
 
 
-def __reset_num():
+def __reset_num(max_number):
     global test_word_num
     global input_unit
     pattern = re.compile(r'^[1-9]+[0-9]?$')
-    answer = input_unit.input_without_check('Set new test number (max 100)\n')
+    msg = 'Set new test number (max ' + str(max_number) + ')\n'
+    answer = input_unit.input_without_check(msg)
     if pattern.match(answer):
-        if int(answer) > 100:
-            answer = 100
+        if int(answer) > max_number:
+            answer = max_number
         test_word_num = int(answer)
         msg = 'Succeed! Test numbers reset to ' + str(test_word_num)
         print(msg)
