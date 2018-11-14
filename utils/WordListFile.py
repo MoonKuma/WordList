@@ -124,7 +124,7 @@ class WordListFile(EasyFile):
                         status = int(line_array[2])
                         test_times = int(line_array[3])
                         correct_times = int(line_array[4])
-                if word is not None and word not in file_dict.keys():
+                if word is not None:
                     file_dict[word] = dict()
                     file_dict[word]['word'] = word
                     file_dict[word]['trans'] = trans
