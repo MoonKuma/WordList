@@ -6,7 +6,7 @@
 # @Desc  : Entrance of all functions:
 #          [1]. Set file patten
 #          [2]. Recall (press [enter] within limited time)
-#          [3]. Multiple-choice(select 1/4 meanings)
+#          # [3]. Multiple-choice(select 1/4 meanings)
 #          [3]. Report result(total/current)
 #          [4]. Quit
 
@@ -43,16 +43,16 @@ class StartLearning(object):
         return
 
     def main_screen_direct(self):
-        acceptable_input = ['1', '2', '3', '4', '5', '6']
-        message = '****Main Function Panel****\n***Select a function***\n*[1].Set file patten\n*[2].Recall\n*[3].Multiple-choice\n*[4].Report\n*[5].Save&Quit\n'
+        acceptable_input = ['1', '2', '3', '4']
+        message = '****Main Function Panel****\n***Select a function***\n*[1].Set file patten\n*[2].Recall\n*[3].Report\n*[4].Save&Quit\n'
         while True:
             answer = self.easy_input.input_and_check(message, acceptable_input, 0)
             simulate_switch(answer, '1', self.set_file_patten)
             simulate_switch(answer, '2', self.recall_test)
-            simulate_switch(answer, '3', self.multiple_choice_test)
-            simulate_switch(answer, '4', self.report_current_result)
-            simulate_switch(answer, '5', self.save_and_quit)
-            if answer == '5':
+            # simulate_switch(answer, '3', self.multiple_choice_test)
+            simulate_switch(answer, '3', self.report_current_result)
+            simulate_switch(answer, '4', self.save_and_quit)
+            if answer == '4':
                 break
         msg = 'Thanks for participant'
         print(msg)
